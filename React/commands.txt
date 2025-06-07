@@ -21,7 +21,7 @@ StrictMode is a tool for highlighting potential problems in an application. Like
 
 git checkout dev_Esteron
 git add .
-git commit -m "Start of React"
+git commit -m "TEXT TEXT"
 git push -u origin dev_Esteron
 
 
