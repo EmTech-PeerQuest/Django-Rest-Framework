@@ -7,3 +7,4 @@ coverage html
 pip install djangorestframework
 
 py -m venv venv
+.\venv\Scripts\activate
