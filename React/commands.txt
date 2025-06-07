@@ -2,8 +2,16 @@ npx create-react-app blogapi .
 cd blogapi
 npm install
 npm start
+
+
 npm install react-router-dom
 npm install @material-ui/core
+
+(
+npm install react-router-dom@latest
+npm install @mui/material @emotion/react @emotion/styled @mui/styles
+)
+
 pip install django-cors-headers
 
 Info:
