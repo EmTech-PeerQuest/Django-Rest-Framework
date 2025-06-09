@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'blog_api',
     'rest_framework',
     'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,7 @@ STATIC_URL = 'static/'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ]
+    ],
 }
 #IsAuthenticated
 #AllowAny

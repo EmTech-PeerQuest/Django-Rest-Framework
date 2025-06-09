@@ -8,3 +8,10 @@ pip install djangorestframework
 
 py -m venv venv
 .\venv\Scripts\activate
+
+pip install pyyaml
+pip install uritemplate
+pip install inflection
+pip install coreapi
+
+pip install drf-spectacular
