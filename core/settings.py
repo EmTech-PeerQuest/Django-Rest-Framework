@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog',
     'blog_api',
     'rest_framework',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,8 @@ REST_FRAMEWORK = {
 }
 #IsAuthenticated
 #AllowAny
+
+AUTH_USER_MODEL = 'users.NewUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
