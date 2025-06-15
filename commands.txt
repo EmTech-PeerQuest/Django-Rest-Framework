@@ -1,0 +1,15 @@
+git checkout your-branch
+git pull origin your-branch
+git fetch origin
+git merge origin/main
+
+git add .
+git commit -m "Resolved merge conflicts from main"
+
+git push origin your-branch
+
+
+git checkout dev_Esteron
+git pull origin dev_Esteron
+git fetch origin
+git merge origin/main
