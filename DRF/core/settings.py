@@ -122,10 +122,18 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # adjust as needed
+]
+
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
+    #'DEFAULT_AUTHENTICATION_CLASSES': [
+    #'rest_framework_simplejwt.authentication.JWTAuthentication'
+    #],
 }
 #IsAuthenticated
 #AllowAny
@@ -134,6 +142,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
     "http://localhost:3000"
 ]
 

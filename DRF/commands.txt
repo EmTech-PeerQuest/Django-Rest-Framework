@@ -15,3 +15,5 @@ pip install inflection
 pip install coreapi
 
 pip install drf-spectacular
+
+pip install django-filter (optional)

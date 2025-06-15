@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid'; // <-- Reverted back to the standard Grid import
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -65,7 +65,9 @@ export default function Footer() {
     <FooterContainer maxWidth="md" component={Container}>
       <Grid container spacing={4} justifyContent="space-evenly">
         {footers.map((footer) => (
-          <Grid item xs={6} sm={3} key={footer.title}>
+          // THIS IS THE CORRECTED LINE FOR STANDARD MUI V5 GRID USAGE
+          // No 'item' prop, and 'xs', 'sm' props are directly on the Grid component.
+          <Grid key={footer.title} xs={6} sm={3}>
             <Typography variant="h6" color="text.primary" gutterBottom>
               {footer.title}
             </Typography>
