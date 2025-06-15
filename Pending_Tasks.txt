@@ -1,0 +1,3 @@
+1. Seperate DB for admins and students 
+1.1. Admins register through terminal
+2. Check if tokens are working or can access pages after login
