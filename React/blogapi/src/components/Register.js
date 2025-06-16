@@ -1,5 +1,6 @@
+// src/components/Register.js
 import React, { useState } from 'react';
-import axiosInstance from '../axios';
+import axiosInstance from '../axios'; // ✅ make sure path is correct relative to this file
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -7,12 +8,14 @@ import {
   Button,
   CssBaseline,
   TextField,
+  FormControlLabel,
+  Checkbox,
   Link,
   Grid,
   Box,
   Typography,
   Container,
-  Paper
+  Paper,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -21,7 +24,7 @@ export default function Register() {
 
   const [formData, setFormData] = useState({
     email: '',
-    username: '',
+    user_name: '',
     password: '',
   });
 
@@ -34,10 +37,16 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Sending registration:", formData);
+
     axiosInstance
-      .post(`user/register/`, formData)
+      .post('user/register/', formData)
       .then(() => {
         navigate('/login');
+      })
+      .catch((err) => {
+        console.error("Registration error:", err);
+        alert("Registration failed. Please check your input.");
       });
   };
 
@@ -74,9 +83,9 @@ export default function Register() {
               margin="normal"
               required
               fullWidth
-              id="username"
+              id="user_name"
               label="Username"
-              name="username"
+              name="user_name"
               autoComplete="username"
               autoFocus
               onChange={handleChange}
@@ -101,6 +110,10 @@ export default function Register() {
               id="password"
               autoComplete="new-password"
               onChange={handleChange}
+            />
+            <FormControlLabel
+              control={<Checkbox value="allowExtraEmails" color="primary" />}
+              label="I want to receive marketing emails."
             />
             <Button
               type="submit"
