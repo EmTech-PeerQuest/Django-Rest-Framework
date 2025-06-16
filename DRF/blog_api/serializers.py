@@ -6,3 +6,8 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('id', 'title', 'slug', 'author', 'excerpt', 'content', 'status')
         model = Post
+
+class PostSerializerToken(serializers.ModelSerializer):
+    class Meta:
+        fields = ('email','password')
+        model = Post
