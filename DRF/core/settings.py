@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'users',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -139,7 +140,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
-
 
 #IsAuthenticated
 #AllowAny
