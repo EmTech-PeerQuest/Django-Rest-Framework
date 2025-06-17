@@ -1,18 +1,11 @@
 from rest_framework import generics
 from rest_framework import viewsets, filters
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import SAFE_METHODS, BasePermission, AllowAny, IsAuthenticated
+from rest_framework.permissions import SAFE_METHODS, BasePermission, AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from blog.models import Post
 from .serializers import PostSerializer
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import SAFE_METHODS, BasePermission, AllowAny, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
-from rest_framework.generics import ListAPIView
-from rest_framework import viewsets
-from rest_framework import filters
-from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from rest_framework import filters
 
 
 class PostUserWritePermission(BasePermission):
@@ -74,7 +67,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission)
 
     #def get_queryset(self):
     #    slug = self.request.query_params.get('slug', None)
-    #    print(slug)
+    #    print(slug) 
     #    return Post.objects.filter(slug=slug)
     
 class PostDetail(generics.ListAPIView):
