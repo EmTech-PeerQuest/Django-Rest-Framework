@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\SummerCPECoding\Social_Login\Django-Rest-Framework\DRF\venv
+set VIRTUAL_ENV=D:\SummerCPECoding\Token_Search\Django-Rest-Framework\DRF\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
