@@ -1,6 +1,6 @@
 // src/components/Register.js
 import React, { useState } from 'react';
-import axiosInstance from '../axios'; // ✅ make sure path is correct relative to this file
+import axiosInstance from '../axios';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -45,7 +45,11 @@ export default function Register() {
         navigate('/login');
       })
       .catch((err) => {
-        console.error("Registration error:", err);
+        if (err.response) {
+          console.error("Backend error response:", err.response.data);
+        } else {
+          console.error("Registration error:", err.message);
+        }
         alert("Registration failed. Please check your input.");
       });
   };
@@ -83,9 +87,9 @@ export default function Register() {
               margin="normal"
               required
               fullWidth
-              id="user_name"
+              id="username"
               label="Username"
-              name="user_name"
+              name="user_name"  // ✅ fixed name
               autoComplete="username"
               autoFocus
               onChange={handleChange}
