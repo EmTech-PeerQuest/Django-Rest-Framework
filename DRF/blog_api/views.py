@@ -1,13 +1,11 @@
-from rest_framework import generics
-from rest_framework import viewsets, filters
-from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import SAFE_METHODS, BasePermission, AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissions
-from rest_framework.response import Response
+from rest_framework import generics, viewsets, filters, permissions
+from rest_framework.permissions import SAFE_METHODS, BasePermission, AllowAny, IsAuthenticated
+from django.shortcuts import get_object_or_404
 from blog.models import Post
 from .serializers import PostSerializer
-from django.shortcuts import get_object_or_404
+from rest_framework.generics import ListAPIView
 
-
+# ✅ Custom permission to allow only authors to edit/delete
 class PostUserWritePermission(BasePermission):
     message = 'Editing posts is restricted to the author only.'
 
@@ -16,11 +14,15 @@ class PostUserWritePermission(BasePermission):
             return True
         return obj.author == request.user
 
+
+# ✅ List or create post
 class PostList(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
     queryset = Post.postobjects.all()
     serializer_class = PostSerializer
 
+
+# ✅ ViewSet for full CRUD using slug
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.postobjects.all()
     serializer_class = PostSerializer
@@ -32,15 +34,27 @@ class PostViewSet(viewsets.ModelViewSet):
         return [AllowAny()]
 
 
-class PostListDetailfilter(ListAPIView):
+# ✅ Filter posts using title or slug (search)
+
+class PostListDetailFilter(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'slug']
+    search_fields = ['$title', 'slug']
 
 
-# ✅ New View: Retrieve a single post using query param (?slug=... or ?title=...)
-class PostQueryRetrieveView(RetrieveAPIView):
+
+# ✅ Search using regex/slugs (for admin or advanced search)
+class PostSearch(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^slug']  # starts-with
+
+
+# ✅ Get single post by slug or title via query params (?slug=... or ?title=...)
+class PostQueryRetrieveView(generics.RetrieveAPIView):
     serializer_class = PostSerializer
     permission_classes = [AllowAny]
 
@@ -51,57 +65,45 @@ class PostQueryRetrieveView(RetrieveAPIView):
             return get_object_or_404(Post, slug=slug)
         elif title:
             return get_object_or_404(Post, title=title)
-        else:
-            raise ValueError("Please provide 'slug' or 'title' as query parameter.")
+        raise ValueError("Please provide 'slug' or 'title' as query parameter.")
 
-# IsAuthenticatedOrReadOnly
 
-    #def get_queryset(self):
-    #    user = self.request.user
-    #    return Post.objects.filter(author=user)
-
-class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
-    permission_classes = [PostUserWritePermission]
+# ✅ Retrieve, update or delete post (author-only)
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated, PostUserWritePermission]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    #def get_queryset(self):
-    #    slug = self.request.query_params.get('slug', None)
-    #    print(slug) 
-    #    return Post.objects.filter(slug=slug)
-    
-class PostDetail(generics.ListAPIView):
-    serializer_class = PostSerializer
 
-    def get_queryset(self):
-        slug = self.request.query_params.get('slug', None)
-        print(slug)
-        return Post.objects.filter(slug=slug)
-
-    #def get_queryset(self):
-    #    slug = self.kwargs['pk']
-    #    print(slug)
-    #    return Post.objects.filter(title=slug)
-
-class PostListDetailfilter(generics.ListAPIView):
-
+# ✅ Admin-specific views (create, retrieve, update, delete)
+class AdminPostDetail(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['$title']
-
-    # '^' Starts-with search.
-    # '=' Exact matches.
-    # '@' Full-text search. (Currently only supported Django's PostgreSQL backend.)
-    # '$' Regex search.
 
 
-class PostSearch(generics.ListAPIView):
-    permission_classes = [AllowAny]
+class CreatePost(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['^slug']
+
+
+class EditPost(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class DeletePost(generics.RetrieveDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+class AdminPostListView(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]  # Or AllowAny for testing
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
 
     # def get_object(self, queryset=None, **kwargs):
     #     item = self.kwargs.get('pk')
