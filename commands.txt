@@ -18,3 +18,14 @@ git checkout dev_Esteron
 git add .
 git commit -m "TEXT TEXT"
 git push -u origin dev_Esteron
+
+
+
+REAL REAL REAL
+git checkout dev_Sample-Feature
+
+git checkout [Feature_Branch]
+git pull origin [Feature_Branch]
+
+git checkout [dev_Branch]
+git merge [dev_Branch]

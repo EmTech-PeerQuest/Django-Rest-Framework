@@ -8,9 +8,12 @@ export default function Logout() {
 
   useEffect(() => {
     const logout = async () => {
+      const refreshToken = localStorage.getItem('refresh_token');
+      console.log('Logging out with refresh_token:', refreshToken);
+
       try {
         await axiosInstance.post('user/logout/blacklist/', {
-          refresh_token: localStorage.getItem('refresh_token'),
+          refresh_token: refreshToken,
         });
 
         localStorage.removeItem('access_token');
@@ -19,7 +22,7 @@ export default function Logout() {
 
         navigate('/login');
       } catch (error) {
-        console.error('Logout failed:', error);
+        console.error('Logout failed:', error.response?.data || error.message);
         navigate('/login');
       }
     };
