@@ -1,3 +1,4 @@
+// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -13,21 +14,7 @@ import App from './App';
 import Register from './components/Register';
 import Login from './components/Login';
 import Logout from './components/Logout';
-
-// Placeholder component for Post Detail
-import { useParams } from 'react-router-dom';
-
-const PostDetail = () => {
-  const { slug } = useParams();
-
-  return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Post Detail Page</h2>
-      <p>This is a placeholder for the post: <strong>{slug}</strong></p>
-      <p>Use `useParams()` to fetch this post's data from the backend using the slug.</p>
-    </div>
-  );
-};
+import Single from './components/Single'; // Single post component
 
 // MUI theme (customize this if needed)
 const theme = createTheme({
@@ -51,7 +38,7 @@ root.render(
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/post/:slug" element={<PostDetail />} />
+            <Route path="/posts/:slug" element={<Single />} /> {/* Updated route */}
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />

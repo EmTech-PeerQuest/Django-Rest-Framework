@@ -6,13 +6,24 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { styled } from '@mui/material/styles';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
-
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+
+// Helper to check if access token is not expired
+function isTokenValid(token) {
+  if (!token) return false;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const exp = payload.exp * 1000;
+    return Date.now() < exp;
+  } catch {
+    return false;
+  }
+}
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
@@ -45,7 +56,8 @@ function Header() {
     }
   };
 
-  const isAuthenticated = !!localStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
+  const isAuthenticated = isTokenValid(accessToken);
 
   const handleLogout = () => {
     navigate('/logout');
@@ -58,7 +70,7 @@ function Header() {
         <StyledToolbar>
           <Typography variant="h6" color="inherit" noWrap>
             <Link component={NavLink} to="/" underline="none" color="textPrimary">
-              PeerQuest
+              Blog
             </Link>
           </Typography>
 
