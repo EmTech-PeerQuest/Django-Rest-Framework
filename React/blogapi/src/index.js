@@ -1,4 +1,3 @@
-// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -14,12 +13,15 @@ import App from './App';
 import Register from './components/Register';
 import Login from './components/Login';
 import Logout from './components/Logout';
-import Single from './components/Single'; // Single post component
+import Single from './components/Single';
+import Admin from './Admin';
+import Create from './components/admin/Create';
+import Edit from './components/admin/Edit';
+import Delete from './components/admin/Delete';
 
-// MUI theme (customize this if needed)
 const theme = createTheme({
   palette: {
-    mode: 'light', // or 'dark'
+    mode: 'light',
   },
   typography: {
     fontFamily: 'Roboto, Arial, sans-serif',
@@ -38,10 +40,14 @@ root.render(
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/posts/:slug" element={<Single />} /> {/* Updated route */}
+            <Route path="/posts/:slug" element={<Single />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/create" element={<Create />} />
+            <Route path="/admin/edit/:id" element={<Edit />} />
+            <Route path="/admin/delete/:id" element={<Delete />} />
             <Route
               path="*"
               element={

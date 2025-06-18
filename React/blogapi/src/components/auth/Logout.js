@@ -1,6 +1,5 @@
-// src/components/Logout.js
 import React, { useEffect } from 'react';
-import axiosInstance from '../axios';
+import axios from 'axios'; // <-- Use plain axios here
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, CircularProgress } from '@mui/material';
 
@@ -13,14 +12,17 @@ export default function Logout() {
       console.log('Logging out with refresh_token:', refreshToken);
 
       try {
-        await axiosInstance.post('user/logout/blacklist/', {
-          refresh: refreshToken,
+        await axios.post('http://127.0.0.1:8000/api/user/logout/blacklist/', {
+          refresh_token: refreshToken,
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
 
+        // Clean up
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        axiosInstance.defaults.headers['Authorization'] = null;
-
         navigate('/login');
       } catch (error) {
         console.error('Logout failed:', error.response?.data || error.message);
