@@ -1,4 +1,3 @@
-// src/axios.js
 import axios from 'axios';
 
 const baseURL = 'http://127.0.0.1:8000/api/';
@@ -7,14 +6,26 @@ const axiosInstance = axios.create({
   baseURL: baseURL,
   timeout: 5000,
   headers: {
-    Authorization: localStorage.getItem('access_token')
-      ? 'Bearer ' + localStorage.getItem('access_token')
-      : null,
     'Content-Type': 'application/json',
-    accept: 'application/json',
+    Accept: 'application/json',
   },
 });
 
+// ✅ Always attach fresh access token before each request
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem('access_token');
+    if (accessToken) {
+      config.headers['Authorization'] = 'JWT ' + accessToken;  // 🔧 changed from 'Bearer'
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// ✅ Handle 401s and auto-refresh token
 axiosInstance.interceptors.response.use(
   response => response,
   async error => {
@@ -27,19 +38,20 @@ axiosInstance.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const res = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+        const res = await axios.post(baseURL + 'token/refresh/', {
           refresh: localStorage.getItem('refresh_token'),
         });
 
         localStorage.setItem('access_token', res.data.access);
-        axiosInstance.defaults.headers['Authorization'] =
-          'Bearer ' + res.data.access;
-        originalRequest.headers['Authorization'] =
-          'Bearer ' + res.data.access;
+
+        // Set new token for retry
+        originalRequest.headers['Authorization'] = 'JWT ' + res.data.access;
 
         return axiosInstance(originalRequest);
       } catch (err) {
-        console.error('Refresh token failed', err);
+        console.error('Token refresh failed:', err);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
       }
     }
     return Promise.reject(error);

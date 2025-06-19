@@ -15,12 +15,16 @@ export default function DeletePost() {
 		e.preventDefault();
 		setLoading(true);
 		try {
-			await axiosInstance.delete(`admin/delete/${id}`);
+			await axiosInstance.delete(`admin/delete/${id}/`);
 			alert('Post deleted successfully.');
 			navigate('/admin/');
 		} catch (error) {
 			console.error('Error deleting post:', error);
-			alert('There was an error deleting the post.');
+			let msg = 'There was an error deleting the post.';
+			if (error.response && error.response.data && error.response.data.detail) {
+				msg = error.response.data.detail;
+			}
+			alert(msg);
 		} finally {
 			setLoading(false);
 		}
