@@ -35,10 +35,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <h1 style={{ textAlign: 'center', margin: '2rem 0' }}>Latest Posts</h1>
-      <PostLoading isLoading={appState.loading} posts={appState.posts} />
-    </div>
+    <>
+      <div className="App">
+        <h1 style={{ textAlign: 'center', margin: '2rem 0' }}>Latest Posts</h1>
+        <PostLoading isLoading={appState.loading} posts={appState.posts} />
+      </div>
+    </>
   );
 }
 

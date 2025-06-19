@@ -18,6 +18,7 @@ import Admin from './Admin';
 import Create from './components/admin/Create';
 import Edit from './components/admin/Edit';
 import Delete from './components/admin/Delete';
+import ScrollToTop from './ScrollToTop'; // <-- Import here
 
 const theme = createTheme({
   palette: {
@@ -35,6 +36,7 @@ root.render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <ScrollToTop /> {/* <-- Add here */}
         <Header />
         <main style={{ minHeight: 'calc(100vh - 120px)', padding: '1rem' }}>
           <Routes>
