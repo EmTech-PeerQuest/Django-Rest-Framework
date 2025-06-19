@@ -95,9 +95,9 @@ class EditPost(generics.UpdateAPIView):
 
 
 class DeletePost(generics.RetrieveDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
 
 class AdminPostListView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]  # Or AllowAny for testing
