@@ -62,8 +62,12 @@ export default function SignIn() {
       .then((res) => {
         localStorage.setItem('access_token', res.data.access);
         localStorage.setItem('refresh_token', res.data.refresh);
-        axiosInstance.defaults.headers['Authorization'] = 'JWT ' + res.data.access;
+        axiosInstance.defaults.headers['Authorization'] = 'Bearer ' + res.data.access; // ✅ FIXED here
         navigate('/');
+      })
+      .catch((err) => {
+        console.error('Login failed:', err);
+        alert('Invalid email or password');
       });
   };
 
