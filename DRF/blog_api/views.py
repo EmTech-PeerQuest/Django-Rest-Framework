@@ -4,6 +4,11 @@ from django.shortcuts import get_object_or_404
 from blog.models import Post
 from .serializers import PostSerializer
 from rest_framework.generics import ListAPIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 
 # ✅ Custom permission to allow only authors to edit/delete
 class PostUserWritePermission(BasePermission):
@@ -82,10 +87,18 @@ class AdminPostDetail(generics.RetrieveAPIView):
     serializer_class = PostSerializer
 
 
-class CreatePost(generics.CreateAPIView):
+class CreatePost(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, format=None):
+        print(request.data)
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EditPost(generics.UpdateAPIView):
