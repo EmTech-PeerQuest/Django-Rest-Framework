@@ -1,3 +1,4 @@
+// components/PostLoading.js
 import React from 'react';
 
 const PostLoading = (Component) => {

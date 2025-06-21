@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import axiosInstance from '../../axios';
+// src/pages/SignIn.js
+import React, { useState, useContext } from 'react';
+import axiosInstance from '../../axios/login';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Avatar,
@@ -14,6 +15,8 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { makeStyles } from '@mui/styles';
+import { GoogleLogin } from '@react-oauth/google';
+import { AuthContext } from '../../context/AuthContext';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -38,6 +41,7 @@ const useStyles = makeStyles(() => ({
 export default function SignIn() {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const [formData, updateFormData] = useState({
     email: '',
@@ -55,19 +59,22 @@ export default function SignIn() {
     e.preventDefault();
 
     axiosInstance
-      .post(`token/`, {
-        email: formData.email,
-        password: formData.password
+      .post('auth/token/', {
+        grant_type: 'password',
+        username: formData.email,
+        password: formData.password,
+        client_id: 'HzUMg62DjoHgrtPSnMqKy2qs8hPBneywrmApogvu',
+        client_secret:
+          'KMqTFHWXjdwvtydVBiubnQSR37D9i4xY7WzuaMOu7qwLrVunbGpLXHtgpLfgJEwN95JeQCBpaaV4dsZaeRuJIZASoRetsa4TkqSUYKu66gC8Lq1eSYWgnF9FapIRadgY'
       })
       .then((res) => {
-        localStorage.setItem('access_token', res.data.access);
-        localStorage.setItem('refresh_token', res.data.refresh);
-        axiosInstance.defaults.headers['Authorization'] = 'Bearer ' + res.data.access; // ✅ FIXED here
-        navigate('/');
+        localStorage.setItem('access_token', res.data.access_token);
+        localStorage.setItem('refresh_token', res.data.refresh_token);
+        login(); // ✅ Update auth state
+        navigate('/'); // ✅ Redirect to home
       })
-      .catch((err) => {
-        console.error('Login failed:', err);
-        alert('Invalid email or password');
+      .catch(() => {
+        alert('Login failed. Please check your credentials and try again.');
       });
   };
 
@@ -113,6 +120,27 @@ export default function SignIn() {
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             Sign In
           </Button>
+
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              try {
+                const res = await axiosInstance.post('auth/google/', {
+                  token: credentialResponse.credential
+                });
+
+                localStorage.setItem('access_token', res.data.access_token);
+                localStorage.setItem('refresh_token', res.data.refresh_token);
+                login(); // ✅ Trigger header UI update
+                navigate('/');
+              } catch {
+                alert('Google login failed. Please try again.');
+              }
+            }}
+            onError={() => {
+              alert('Google login failed. Please try again.');
+            }}
+          />
+
           <Grid container>
             <Grid item xs>
               <Link to="/forgot-password" style={{ textDecoration: 'none' }}>

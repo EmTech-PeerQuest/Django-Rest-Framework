@@ -8,8 +8,10 @@ from .views import (
     CreatePost, 
     EditPost, 
     AdminPostDetail, 
-    DeletePost
+    DeletePost,
+    GoogleAuthView,  # ✅ Add this
 )
+from .views import GoogleAuthView
 
 app_name = 'blog_api'
 
@@ -17,13 +19,16 @@ router = DefaultRouter()
 router.register('posts', PostViewSet, basename='post')
 
 urlpatterns = [
+    path('auth/google/', GoogleAuthView.as_view(), name='google-login'),
     path('', include(router.urls)),  # Handles /posts/ (list, detail, create, update, delete)
-    path('posts/by-slug/', PostDetail.as_view(), name='post-by-slug'),  # For ?slug=... lookups
-    path('search/', PostListDetailFilter.as_view(), name='postsearch'),  # Search by title or slug
-    path('posts/query/', PostQueryRetrieveView.as_view(), name='postquery'),  # Get single post by ?slug= or ?title=
+    path('posts/by-slug/', PostDetail.as_view(), name='post-by-slug'),
+    path('search/', PostListDetailFilter.as_view(), name='postsearch'),
+    path('posts/query/', PostQueryRetrieveView.as_view(), name='postquery'),
     path('admin/create/', CreatePost.as_view(), name='createpost'),
     path('admin/edit/postdetail/<int:pk>/', AdminPostDetail.as_view(), name='admindetailpost'),
     path('admin/edit/<int:pk>/', EditPost.as_view(), name='editpost'),
     path('admin/delete/<int:pk>/', DeletePost.as_view(), name='deletepost'),
-]
 
+    # ✅ Add Google OAuth endpoint here
+    path('auth/google/', GoogleAuthView.as_view(), name='google-login'),
+]

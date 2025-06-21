@@ -18,6 +18,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('api/blog/', include('blog_api.urls')),
     re_path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
     path('admin/', admin.site.urls),
     path('', include('blog.urls', namespace='blog')),
