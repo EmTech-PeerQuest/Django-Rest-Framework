@@ -9,6 +9,7 @@ from .views import (
     EditPost, 
     AdminPostDetail, 
     DeletePost,
+    user_info,
     GoogleAuthView,  # ✅ Add this
 )
 from .views import GoogleAuthView
@@ -19,6 +20,7 @@ router = DefaultRouter()
 router.register('posts', PostViewSet, basename='post')
 
 urlpatterns = [
+    path('api/user-info/', user_info),
     path('auth/google/', GoogleAuthView.as_view(), name='google-login'),
     path('', include(router.urls)),  # Handles /posts/ (list, detail, create, update, delete)
     path('posts/by-slug/', PostDetail.as_view(), name='post-by-slug'),

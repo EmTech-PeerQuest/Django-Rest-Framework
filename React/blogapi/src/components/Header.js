@@ -29,6 +29,9 @@ function Header() {
   const navigate = useNavigate();
   const { isAuthenticated, isAdmin, logout } = useContext(AuthContext);
   const [data, setData] = useState({ search: '' });
+  
+  console.log('isAuthenticated:', isAuthenticated);
+  console.log('isAdmin:', isAdmin);
 
   const handleInputChange = (event) => {
     setData({ search: event.target.value });

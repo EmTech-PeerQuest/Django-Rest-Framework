@@ -11,21 +11,19 @@ const axiosInstance = axios.create({
   },
 });
 
-// ✅ Always attach fresh access token before each request
+// ✅ Attach token correctly with space
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('access_token');
     if (accessToken) {
-      config.headers['Authorization'] = 'Bearer' + accessToken;  // 🔧 changed from 'Bearer'
+      config.headers['Authorization'] = 'Bearer ' + accessToken;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// ✅ Handle 401s and auto-refresh token
+// ✅ Handle token refresh if expired
 axiosInstance.interceptors.response.use(
   response => response,
   async error => {
@@ -44,8 +42,8 @@ axiosInstance.interceptors.response.use(
 
         localStorage.setItem('access_token', res.data.access);
 
-        // Set new token for retry
-        originalRequest.headers['Authorization'] = 'JWT ' + res.data.access;
+        // 🔧 Use correct Bearer prefix
+        originalRequest.headers['Authorization'] = 'Bearer ' + res.data.access;
 
         return axiosInstance(originalRequest);
       } catch (err) {

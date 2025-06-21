@@ -21,6 +21,22 @@ from google.auth.transport import requests
 from oauth2_provider.models import Application, AccessToken, RefreshToken
 from oauth2_provider.settings import oauth2_settings
 from oauthlib.common import generate_token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_info(request):
+    user = request.user
+    return Response({
+        'email': user.email,
+        'user_name': user.user_name,
+        'first_name': user.first_name,
+        'is_staff': user.is_staff,
+        'is_superuser': user.is_superuser
+    })
 
 
 class GoogleAuthView(APIView):
