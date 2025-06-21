@@ -29,3 +29,6 @@ git pull origin [Feature_Branch]
 
 git checkout [dev_Branch]
 git merge [dev_Branch]
+
+pip install -r requirements.txt
+npm install
