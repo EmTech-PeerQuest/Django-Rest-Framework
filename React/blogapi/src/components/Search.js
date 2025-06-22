@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../axios';
+import axiosInstance from '../axios';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -55,64 +55,64 @@ const Search = () => {
                         appState.posts.map((post) => {
                             return (
                                 <Grid key={post.id} xs={12} md={4}>
-                                    <Link
-                                        component={RouterLink}
-                                        to={`/posts/${post.slug}`}
-                                        color="inherit"
-                                        underline="none"
+                                    <Card
                                         sx={{
-                                            margin: theme.spacing(1, 1.5),
-                                            flexGrow: 1,
+                                            backgroundColor:
+                                                theme.palette.mode === 'light'
+                                                    ? theme.palette.grey[200]
+                                                    : theme.palette.grey[700],
                                             display: 'flex',
                                             flexDirection: 'column',
                                             height: '100%',
-                                            textDecoration: 'none'
                                         }}
                                     >
-                                        <Card
+                                        <Link
+                                            component={RouterLink}
+                                            to={'/post/' + post.slug}
+                                            color="inherit"
+                                            underline="none"
                                             sx={{
-                                                backgroundColor:
-                                                    theme.palette.mode === 'light'
-                                                        ? theme.palette.grey[200]
-                                                        : theme.palette.grey[700],
+                                                margin: theme.spacing(1, 1.5),
+                                                flexGrow: 1,
                                                 display: 'flex',
                                                 flexDirection: 'column',
-                                                height: '100%',
                                             }}
                                         >
                                             <StyledCardMedia
-                                                image={post.image} // Use the actual image URL from your API
-                                                title={post.title}
+                                                image="https://source.unsplash.com/random"
+                                                title="Image title"
                                             />
-                                            <CardContent sx={{ flexGrow: 1 }}>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="h6"
-                                                    component="h2"
-                                                    sx={{
-                                                        fontSize: '16px',
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    {post.title.substr(0, 50)}...
+                                        </Link>
+                                        <CardContent
+                                            sx={{ flexGrow: 1 }}
+                                        >
+                                            <Typography
+                                                gutterBottom
+                                                variant="h6"
+                                                component="h2"
+                                                sx={{
+                                                    fontSize: '16px',
+                                                    textAlign: 'left',
+                                                }}
+                                            >
+                                                {post.title.substr(0, 50)}...
+                                            </Typography>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'left',
+                                                    alignItems: 'baseline',
+                                                    fontSize: '12px',
+                                                    textAlign: 'left',
+                                                    marginBottom: theme.spacing(2),
+                                                }}
+                                            >
+                                                <Typography color="textSecondary">
+                                                    {post.excerpt.substr(0, 40)}...
                                                 </Typography>
-                                                <Box
-                                                    sx={{
-                                                        display: 'flex',
-                                                        justifyContent: 'left',
-                                                        alignItems: 'baseline',
-                                                        fontSize: '12px',
-                                                        textAlign: 'left',
-                                                        marginBottom: theme.spacing(2),
-                                                    }}
-                                                >
-                                                    <Typography color="textSecondary">
-                                                        {post.excerpt.substr(0, 40)}...
-                                                    </Typography>
-                                                </Box>
-                                            </CardContent>
-                                        </Card>
-                                    </Link>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
                                 </Grid>
                             );
                         })
