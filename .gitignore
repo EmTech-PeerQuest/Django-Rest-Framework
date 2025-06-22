@@ -1,0 +1,121 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+.env/
+env.bak/
+venv.bak/
+
+# Django
+*.db
+*.sqlite3
+/media
+/staticfiles
+/static_cdn
+/local_settings.py
+db.sqlite3
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs and local state
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.pid
+*.seed
+*.swp
+*.swo
+*.orig
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React build files
+build/
+dist/
+*.tgz
+
+# dotenv
+.env
+.env.*
+
+# Coverage and testing
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache/
+.pytest_cache/
+
+# Migrations (optional – keep if auto-generated)
+**/migrations/*.pyc
+**/migrations/__pycache__/
+
+# Git
+*.rej
+*.orig
+*.bak
+*.swp
+*~
+*.tmp
+
+# JetBrains IDEs
+.idea/
+
+# Heroku
+*.sqlite3
+
+# Pipenv
+Pipfile.lock
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage reports
+.coverage
+coverage.xml
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# celery
+celerybeat-schedule
+celerybeat.pid
+
+# gunicorn
+gunicorn.pid
+
+# SSH
+*.pem
