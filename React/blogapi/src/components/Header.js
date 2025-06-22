@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -13,17 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-// Helper to check if access token is not expired
-function isTokenValid(token) {
-  if (!token) return false;
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    const exp = payload.exp * 1000;
-    return Date.now() < exp;
-  } catch {
-    return false;
-  }
-}
+import { AuthContext } from '../context/AuthContext';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
@@ -37,7 +27,11 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 function Header() {
   const navigate = useNavigate();
+  const { isAuthenticated, isAdmin, logout } = useContext(AuthContext);
   const [data, setData] = useState({ search: '' });
+  
+  console.log('isAuthenticated:', isAuthenticated);
+  console.log('isAdmin:', isAdmin);
 
   const handleInputChange = (event) => {
     setData({ search: event.target.value });
@@ -56,11 +50,9 @@ function Header() {
     }
   };
 
-  const accessToken = localStorage.getItem('access_token');
-  const isAuthenticated = isTokenValid(accessToken);
-
   const handleLogout = () => {
-    navigate('/logout');
+    logout();
+    navigate('/login');
   };
 
   return (
@@ -119,13 +111,26 @@ function Header() {
                 </Button>
               </>
             ) : (
-              <Button
-                onClick={handleLogout}
-                color="secondary"
-                variant="outlined"
-              >
-                Logout
-              </Button>
+              <>
+                {isAdmin && (
+                  <Button
+                    component={NavLink}
+                    to="/admin"
+                    color="warning"
+                    variant="outlined"
+                    sx={{ mx: 1 }}
+                  >
+                    Admin
+                  </Button>
+                )}
+                <Button
+                  onClick={handleLogout}
+                  color="secondary"
+                  variant="outlined"
+                >
+                  Logout
+                </Button>
+              </>
             )}
           </Box>
         </StyledToolbar>

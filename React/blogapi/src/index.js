@@ -8,17 +8,19 @@ import CssBaseline from '@mui/material/CssBaseline';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Search from './components/Search';
+import Search from './components/posts/Search';
 import App from './App';
-import Register from './components/Register';
-import Login from './components/Login';
-import Logout from './components/Logout';
-import Single from './components/Single';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Logout from './components/auth/Logout';
+import Single from './components/posts/Single';
 import Admin from './Admin';
 import Create from './components/admin/Create';
 import Edit from './components/admin/Edit';
 import Delete from './components/admin/Delete';
 import ScrollToTop from './ScrollToTop'; // <-- Import here
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { AuthProvider } from './context/AuthContext';
 
 const theme = createTheme({
   palette: {
@@ -33,6 +35,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
+    <AuthProvider>
+    <GoogleOAuthProvider clientId="802160767636-4m14n7e8uf53cn02v01gmhbsgud18eop.apps.googleusercontent.com">
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
@@ -64,5 +68,7 @@ root.render(
         <Footer />
       </Router>
     </ThemeProvider>
+    </GoogleOAuthProvider>;
+    </AuthProvider>
   </React.StrictMode>
 );

@@ -40,6 +40,7 @@ export default function Create() {
 		slug: '',
 		excerpt: '',
 		content: '',
+		image: null, // Add image to state
 	});
 
 	function slugify(string) {
@@ -62,23 +63,35 @@ export default function Create() {
 	}
 
 	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-			...(name === 'title' && { slug: slugify(value) }),
-		}));
+		const { name, value, type, files } = e.target;
+		if (type === 'file') {
+			setFormData((prev) => ({
+				...prev,
+				[name]: files[0],
+			}));
+		} else {
+			setFormData((prev) => ({
+				...prev,
+				[name]: value,
+				...(name === 'title' && { slug: slugify(value) }),
+			}));
+		}
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			await axiosInstance.post(`admin/create/`, {
-				title: formData.title,
-				slug: formData.slug,
-				author: 1,
-				excerpt: formData.excerpt,
-				content: formData.content,
+			const data = new FormData();
+			data.append('title', formData.title);
+			data.append('slug', formData.slug);
+			data.append('author', 1);
+			data.append('excerpt', formData.excerpt);
+			data.append('content', formData.content);
+			if (formData.image) {
+				data.append('image', formData.image);
+			}
+			await axiosInstance.post(`admin/create/`, data, {
+				headers: { 'Content-Type': 'multipart/form-data' },
 			});
 			navigate('/admin/');
 		} catch (error) {
@@ -146,6 +159,14 @@ export default function Create() {
 								onChange={handleChange}
 								multiline
 								rows={5}
+							/>
+							<input
+								accept="image/*"
+								style={{ display: 'block', marginTop: 16 }}
+								id="post-image"
+								onChange={handleChange}
+								name="image"
+								type="file"
 							/>
 						</Grid>
 					</Grid>
